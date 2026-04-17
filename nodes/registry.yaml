@@ -1,5 +1,5 @@
 # Atomic Node Registry
-# One entry per node. Aegis reads this to resolve world manifests.
+# Every node MUST declare capabilities, sovereignty, and artifact_sha256 once built.
 
 nodes:
   ether-layer:
@@ -8,6 +8,21 @@ nodes:
     repo: https://github.com/NeuruhAI/neuruh-ether-layer
     depends_on: []
     status: scaffolded
+    contract:
+      invoke_input: contracts/ether-layer-invoke-in@0.1.0.schema.json
+      invoke_output: contracts/ether-layer-invoke-out@0.1.0.schema.json
+      requires_idempotency_key: true
+    capabilities:
+      read_pii: false
+      network_egress: [tailnet, supabase.co]
+      cost_per_invocation_usd: 0.0001
+      latency_p99_ms: 60
+      compliance_scopes: [soc2_cc7.2, soc2_cc8.1]
+      destructive: false
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [user_device, tailnet, supabase_us_east_1]
+      air_gap_capable: true
 
   gray-code-state:
     layer: L1
@@ -15,6 +30,21 @@ nodes:
     repo: https://github.com/NeuruhAI/core-node-gray-code
     depends_on: [ether-layer]
     status: scaffolded
+    contract:
+      invoke_input: contracts/gray-code-invoke-in@0.1.0.schema.json
+      invoke_output: contracts/gray-code-invoke-out@0.1.0.schema.json
+      requires_idempotency_key: true
+    capabilities:
+      read_pii: false
+      network_egress: []
+      cost_per_invocation_usd: 0.00005
+      latency_p99_ms: 15
+      compliance_scopes: [soc2_cc7.2]
+      destructive: false
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [user_device, tailnet]
+      air_gap_capable: true
 
   ffdb:
     layer: L1
@@ -22,6 +52,21 @@ nodes:
     repo: https://github.com/NeuruhAI/core-node-ffdb
     depends_on: [ether-layer]
     status: scaffolded
+    contract:
+      invoke_input: contracts/ffdb-invoke-in@0.1.0.schema.json
+      invoke_output: contracts/ffdb-invoke-out@0.1.0.schema.json
+      requires_idempotency_key: true
+    capabilities:
+      read_pii: true
+      network_egress: [supabase.co, tailnet]
+      cost_per_invocation_usd: 0.0002
+      latency_p99_ms: 80
+      compliance_scopes: [soc2_cc6.1, soc2_cc6.7, soc2_cc7.2]
+      destructive: false
+    sovereignty:
+      runs_on: [local, managed]
+      data_residency: [tailnet, supabase_us_east_1]
+      air_gap_capable: true
 
   mucs:
     layer: L2
@@ -29,6 +74,17 @@ nodes:
     repo: TBD
     depends_on: [ether-layer, ffdb]
     status: planned
+    capabilities:
+      read_pii: true
+      network_egress: [supabase.co]
+      cost_per_invocation_usd: 0.0008
+      latency_p99_ms: 140
+      compliance_scopes: [soc2_cc6.1]
+      destructive: false
+    sovereignty:
+      runs_on: [local, managed]
+      data_residency: [tailnet, supabase_us_east_1]
+      air_gap_capable: true
 
   spc:
     layer: L2
@@ -36,6 +92,17 @@ nodes:
     repo: TBD
     depends_on: [mucs]
     status: planned
+    capabilities:
+      read_pii: false
+      network_egress: []
+      cost_per_invocation_usd: 0.0003
+      latency_p99_ms: 100
+      compliance_scopes: [soc2_cc7.2]
+      destructive: false
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [user_device, tailnet]
+      air_gap_capable: true
 
   nsec:
     layer: L3
@@ -43,6 +110,17 @@ nodes:
     repo: TBD
     depends_on: [ether-layer]
     status: planned
+    capabilities:
+      read_pii: false
+      network_egress: []
+      cost_per_invocation_usd: 0.0001
+      latency_p99_ms: 20
+      compliance_scopes: [soc2_cc6.1, soc2_cc6.7]
+      destructive: true
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [user_device, tailnet]
+      air_gap_capable: true
 
   ether-rbac:
     layer: L3
@@ -50,6 +128,17 @@ nodes:
     repo: https://github.com/NeuruhAI/neuruh-ether-rbac
     depends_on: [ether-layer]
     status: scaffolded
+    capabilities:
+      read_pii: true
+      network_egress: [tailnet]
+      cost_per_invocation_usd: 0.0001
+      latency_p99_ms: 25
+      compliance_scopes: [soc2_cc6.1, soc2_cc6.6]
+      destructive: false
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [tailnet]
+      air_gap_capable: true
 
   ipp-mcb:
     layer: L4
@@ -57,6 +146,17 @@ nodes:
     repo: https://github.com/NeuruhAI/neuruh-axon
     depends_on: [ether-layer, ether-rbac]
     status: extracted_from_axon
+    capabilities:
+      read_pii: true
+      network_egress: [openai.com, anthropic.com, tailnet, supabase.co]
+      cost_per_invocation_usd: 0.004
+      latency_p99_ms: 900
+      compliance_scopes: [soc2_cc6.1, soc2_cc6.7]
+      destructive: false
+    sovereignty:
+      runs_on: [managed, cloud]
+      data_residency: [supabase_us_east_1]
+      air_gap_capable: false
 
   pmla-cap:
     layer: L4
@@ -64,3 +164,14 @@ nodes:
     repo: https://github.com/NeuruhAI/pmla-constraint-engineering
     depends_on: [ether-layer, ffdb]
     status: live
+    capabilities:
+      read_pii: false
+      network_egress: [tailnet, supabase.co]
+      cost_per_invocation_usd: 0.0005
+      latency_p99_ms: 150
+      compliance_scopes: [soc2_cc7.2, soc2_cc8.1]
+      destructive: false
+    sovereignty:
+      runs_on: [edge, local, managed]
+      data_residency: [user_device, tailnet, supabase_us_east_1]
+      air_gap_capable: true

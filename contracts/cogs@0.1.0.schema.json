@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeuruhAI/aegis/contracts/cogs@0.1.0.schema.json",
+  "title": "CostOfGoods",
+  "description": "Computed unit economics for a world composition.",
+  "type": "object",
+  "required": ["per_request_usd", "per_month_p99_usd", "expected_margin_pct"],
+  "properties": {
+    "per_request_usd": { "type": "number", "minimum": 0 },
+    "per_month_p99_usd": { "type": "number", "minimum": 0 },
+    "expected_margin_pct": { "type": "number" },
+    "pricing_floor_recommendation": { "type": "number" }
+  }
+}

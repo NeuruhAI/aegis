@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeuruhAI/aegis/contracts/atomic-node@0.1.0.schema.json",
+  "title": "AtomicNode",
+  "description": "Universal interface every Neuruh atomic node must satisfy. Contract changes require semver bump.",
+  "type": "object",
+  "required": ["name", "version", "layer", "capabilities", "sovereignty", "contract"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "layer": { "enum": ["L0", "L1", "L2", "L3", "L4", "L5"] },
+    "depends_on": { "type": "array", "items": { "type": "string" } },
+    "capabilities": { "$ref": "#/$defs/Capabilities" },
+    "sovereignty": { "$ref": "#/$defs/Sovereignty" },
+    "contract": {
+      "type": "object",
+      "required": ["invoke_input", "invoke_output"],
+      "properties": {
+        "invoke_input": { "type": "string", "description": "JSON Schema URI for invoke() input" },
+        "invoke_output": { "type": "string", "description": "JSON Schema URI for invoke() output" },
+        "requires_idempotency_key": { "type": "boolean", "default": true }
+      }
+    },
+    "artifact_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "Capabilities": {
+      "type": "object",
+      "required": ["read_pii", "network_egress", "cost_per_invocation_usd", "latency_p99_ms", "destructive"],
+      "properties": {
+        "read_pii": { "type": "boolean" },
+        "network_egress": { "type": "array", "items": { "type": "string" } },
+        "cost_per_invocation_usd": { "type": "number", "minimum": 0 },
+        "latency_p99_ms": { "type": "integer", "minimum": 0 },
+        "compliance_scopes": { "type": "array", "items": { "type": "string" } },
+        "destructive": { "type": "boolean" }
+      }
+    },
+    "Sovereignty": {
+      "type": "object",
+      "required": ["runs_on", "data_residency", "air_gap_capable"],
+      "properties": {
+        "runs_on": {
+          "type": "array",
+          "items": { "enum": ["edge", "local", "managed", "cloud"] }
+        },
+        "data_residency": { "type": "array", "items": { "type": "string" } },
+        "air_gap_capable": { "type": "boolean" }
+      }
+    }
+  }
+}

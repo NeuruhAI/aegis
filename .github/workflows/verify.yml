@@ -1,0 +1,31 @@
+name: Verify Rules + Replay
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check rule file signature exists
+        run: test -f rules/v0_1.yaml.sig || echo "TODO: rule signing not yet bootstrapped"
+      - name: Validate rule file against schema
+        run: echo "TODO: jsonschema validation of rules/v0_1.yaml"
+
+  replay-determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run 100 random replay assertions
+        run: echo "TODO: aegis compose --replay-from for 100 ledger records, assert byte-equal"
+
+  contract-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate all node.yaml files against atomic-node@0.1.0.schema.json
+        run: echo "TODO: jsonschema check nodes/registry.yaml against contract"

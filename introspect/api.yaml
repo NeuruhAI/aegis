@@ -1,0 +1,50 @@
+# OpenAPI stub for Router Introspection API
+openapi: 3.0.3
+info:
+  title: Aegis Introspection API
+  version: 0.1.0
+  description: Self-describing Router. Any agent can discover worlds + nodes + capabilities at runtime.
+paths:
+  /aegis/inspect/worlds:
+    get:
+      summary: List all available worlds + manifests
+      responses:
+        '200':
+          description: Array of WorldManifest
+  /aegis/inspect/nodes:
+    get:
+      summary: List all registered atomic nodes with capabilities + sovereignty
+      responses:
+        '200':
+          description: Array of AtomicNode
+  /aegis/inspect/capabilities:
+    get:
+      summary: Union of capabilities across all registered nodes
+      responses:
+        '200':
+          description: Aggregate capability surface
+  /aegis/inspect/rule-file:
+    get:
+      summary: Current rule file sha256 + signer DID
+      responses:
+        '200':
+          description: Rule file metadata
+  /aegis/route:
+    post:
+      summary: Classify input + route to world (no side effects)
+      parameters:
+        - name: explain
+          in: query
+          schema: { type: boolean }
+          description: If true, returns human-readable decision narrative
+  /aegis/compose:
+    post:
+      summary: Compose world manifest. Emits provenance record.
+      parameters:
+        - name: replay-from
+          in: query
+          schema: { type: string }
+          description: Replay a previous decision_id. Asserts byte-equal output.
+  /aegis/cogs:
+    post:
+      summary: Compute cost-of-goods for a world composition given input volume

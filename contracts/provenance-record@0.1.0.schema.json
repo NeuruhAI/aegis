@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeuruhAI/aegis/contracts/provenance-record@0.1.0.schema.json",
+  "title": "ProvenanceRecord",
+  "description": "Signed record of a single Router decision. Appended to ether-layer, never mutated.",
+  "type": "object",
+  "required": ["decision_id", "input_shape", "candidates", "winner", "manifest", "agent", "rule_file_sha256", "ts", "signature"],
+  "properties": {
+    "decision_id": { "type": "string", "description": "ULID" },
+    "input_shape": { "type": "object" },
+    "candidates": { "type": "array", "items": { "type": "string" } },
+    "winner": { "type": "string" },
+    "manifest": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+@[0-9]+\\.[0-9]+\\.[0-9]+@sha256:[a-f0-9]{64}$" }
+    },
+    "cogs": { "$ref": "https://github.com/NeuruhAI/aegis/contracts/cogs@0.1.0.schema.json" },
+    "agent": { "type": "string", "description": "DID" },
+    "rule_file_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "ts": { "type": "string", "format": "date-time" },
+    "replay_of": { "type": "string", "description": "Optional parent decision_id when this is a --replay-from" },
+    "signature": { "type": "string", "pattern": "^(ed25519|cosign):" }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NeuruhAI/aegis/contracts/world-manifest@0.1.0.schema.json",
+  "title": "WorldManifest",
+  "type": "object",
+  "required": ["name", "destination_state", "required_nodes", "budget"],
+  "properties": {
+    "name": { "type": "string" },
+    "destination_state": { "type": "string" },
+    "primary_input_shapes": { "type": "array" },
+    "required_nodes": {
+      "type": "array",
+      "items": { "type": "string", "description": "node@semver[@sha256]" }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["max_usd_per_request", "max_latency_p99_ms"],
+      "properties": {
+        "max_usd_per_request": { "type": "number" },
+        "max_latency_p99_ms": { "type": "integer" }
+      }
+    },
+    "sovereignty_requirements": { "$ref": "atomic-node@0.1.0.schema.json#/$defs/Sovereignty" }
+  }
+}

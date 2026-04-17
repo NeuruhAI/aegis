@@ -1,0 +1,21 @@
+# Governance config for signing + dual-control.
+# Edited only via signed PR from root authority.
+
+version: 0.1.0
+
+signers:
+  root:
+    - did: did:neuruh:jeramie
+      public_key: ed25519:TBD_REPLACE_WITH_REAL_KEY
+      role: root_authority
+      authorized_at: 2026-04-17
+
+dual_control:
+  required_when:
+    - capabilities.destructive: true
+    - signer_role: root_authority_change
+  min_signatures: 2
+
+rotation:
+  rule_file_rekey_after_days: 90
+  provenance_record_required_on_rotation: true
