@@ -1,0 +1,21 @@
+# World: Aegis (meta)
+# Destination: Composer itself — builds new worlds from input shapes
+
+name: Aegis
+destination_state: world_composer
+primary_input_shapes:
+  - { meta: true, agent_brief: "requires new destination" }
+
+required_nodes:
+  - ether-layer@0.1.0
+  - pmla-cap@0.1.0
+
+surface:
+  description: "Meta-world. When no existing world matches input shape, Aegis synthesizes one."
+  deliverables:
+    - Generated world YAML
+    - Pull request against aegis/worlds/
+    - Agent decision trace
+
+pricing_floor: custom
+recurring_floor: custom

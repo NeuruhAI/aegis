@@ -1,0 +1,66 @@
+# Atomic Node Registry
+# One entry per node. Aegis reads this to resolve world manifests.
+
+nodes:
+  ether-layer:
+    layer: L0
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/neuruh-ether-layer
+    depends_on: []
+    status: scaffolded
+
+  gray-code-state:
+    layer: L1
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/core-node-gray-code
+    depends_on: [ether-layer]
+    status: scaffolded
+
+  ffdb:
+    layer: L1
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/core-node-ffdb
+    depends_on: [ether-layer]
+    status: scaffolded
+
+  mucs:
+    layer: L2
+    version: 0.1.0
+    repo: TBD
+    depends_on: [ether-layer, ffdb]
+    status: planned
+
+  spc:
+    layer: L2
+    version: 0.1.0
+    repo: TBD
+    depends_on: [mucs]
+    status: planned
+
+  nsec:
+    layer: L3
+    version: 0.1.0
+    repo: TBD
+    depends_on: [ether-layer]
+    status: planned
+
+  ether-rbac:
+    layer: L3
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/neuruh-ether-rbac
+    depends_on: [ether-layer]
+    status: scaffolded
+
+  ipp-mcb:
+    layer: L4
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/neuruh-axon
+    depends_on: [ether-layer, ether-rbac]
+    status: extracted_from_axon
+
+  pmla-cap:
+    layer: L4
+    version: 0.1.0
+    repo: https://github.com/NeuruhAI/pmla-constraint-engineering
+    depends_on: [ether-layer, ffdb]
+    status: live

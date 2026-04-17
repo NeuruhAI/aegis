@@ -1,0 +1,23 @@
+# World: Signal-IQ
+# Destination: Real-estate intelligence feed
+
+name: Signal-IQ
+destination_state: rei_intelligence_feed
+primary_input_shapes:
+  - { domain: real_estate }
+  - { domain: real_estate, volume: stream }
+
+required_nodes:
+  - ether-layer@0.1.0
+  - ffdb@0.1.0
+  - mucs@0.1.0
+
+surface:
+  description: "Acquisition scanner + motivated seller scoring + PMLA prompt library"
+  deliverables:
+    - Streaming MLS feed
+    - Motivated seller score API
+    - Agent-facing dashboard
+
+pricing_floor: 79
+recurring_floor: 249

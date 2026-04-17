@@ -1,0 +1,23 @@
+# World: TaxShield
+# Destination: Tax + audit compliance state
+
+name: TaxShield
+destination_state: tax_audit_compliant
+primary_input_shapes:
+  - { domain: finance }
+  - { domain: finance, compliance: pci }
+
+required_nodes:
+  - ether-layer@0.1.0
+  - ffdb@0.1.0
+  - pmla-cap@0.1.0
+
+surface:
+  description: "Tax position optimization + audit-ready evidence trail"
+  deliverables:
+    - Deduction engine
+    - Audit evidence ledger
+    - Client-ready PDFs
+
+pricing_floor: 497
+recurring_floor: 197

@@ -1,0 +1,29 @@
+# World: NATL
+# Destination: Compliant enterprise runtime
+
+name: NATL
+destination_state: compliant_enterprise_runtime
+primary_input_shapes:
+  - { domain: enterprise, compliance: ">=soc2" }
+
+required_nodes:
+  - ether-layer@0.1.0
+  - gray-code-state@0.1.0
+  - ffdb@0.1.0
+  - mucs@0.1.0
+  - spc@0.1.0
+  - nsec@0.1.0
+  - ether-rbac@0.1.0
+  - ipp-mcb@0.1.0
+  - pmla-cap@0.1.0
+
+surface:
+  description: "Enterprise SDK + compliance certifications"
+  deliverables:
+    - SBOM
+    - SOC2 evidence package
+    - Typed SDK (TypeScript + Python)
+    - Admin console
+
+pricing_floor: 100000  # setup
+recurring_floor: 5000  # monthly

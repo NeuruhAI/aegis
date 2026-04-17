@@ -1,0 +1,73 @@
+# Aegis Router Rules v0.1
+# Declarative rules for the Convergence Protocol router.
+# Edit this file to update router behavior. Aegis loads it at startup.
+
+version: 0.1.0
+
+classify:
+  domain:
+    - match: ["soc2", "fedramp", "hipaa", "enterprise", "rfp", "compliance audit"]
+      assign: enterprise
+    - match: ["agency", "reseller", "white-label", "white label", "sub-contractor"]
+      assign: agency
+    - match: ["wholesale", "flip", "probate", "MLS", "REI", "off-market", "listings"]
+      assign: real_estate
+    - match: ["roof", "HVAC", "contractor", "storm", "hail", "restoration"]
+      assign: home_services
+    - match: ["sigint", "RF", "dispatch", "threat intel", "public safety"]
+      assign: defense
+    - match: ["audit", "tax", "IRS", "deduction"]
+      assign: finance
+    - default: content
+
+  compliance:
+    - match: ["soc2", "SOC 2"]
+      assign: soc2
+    - match: ["hipaa"]
+      assign: hipaa
+    - match: ["fedramp"]
+      assign: fedramp
+    - match: ["pci"]
+      assign: pci
+    - default: none
+
+  volume:
+    - match: ["stream", "real-time", "realtime", "live feed"]
+      assign: stream
+    - match: ["batch", "nightly", "scheduled"]
+      assign: batch
+    - default: single
+
+  urgency:
+    - match: ["asap", "urgent", "today", "this week"]
+      assign: hot
+    - match: ["this quarter", "next month"]
+      assign: warm
+    - default: cold
+
+  budget_band:
+    - match: ["$100k", "$250k", "enterprise", "MSA"]
+      assign: enterprise
+    - match: ["$25k", "$50k", "$75k"]
+      assign: 25k_100k
+    - match: ["$5k", "$10k", "$15k"]
+      assign: 5k_25k
+    - default: under_5k
+
+route:
+  # First-match wins
+  - when: { domain: enterprise, compliance: ">=soc2" }
+    world: NATL
+  - when: { domain: agency, budget_band: ">=25k_100k" }
+    world: AXIOM
+  - when: { domain: real_estate, volume: stream }
+    world: Signal-IQ
+  - when: { domain: real_estate }
+    world: Signal-IQ
+  - when: { domain: finance, compliance: pci }
+    world: TaxShield
+  - when: { domain: finance }
+    world: TaxShield
+  - when: { domain: home_services, volume: stream }
+    world: Signal-IQ  # placeholder until StormStack world defined
+  - default: Aegis.compose
